@@ -63,6 +63,11 @@ boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain, uint8_
   // disable everything to start
   enableGesture(false);
   enableProximity(false);
+  enableColor(false);
+  
+  disableColorInterrupt();
+  disableProximityInterrupt();
+  clearInterrupt();
 
   /* Note: by default, the device is in power down mode on bootup */
   enable(false);
@@ -176,6 +181,27 @@ void Adafruit_APDS9960::enableProximity(boolean en)
   write8(APDS9960_ENABLE, _enable.get());
 }
 
+void Adafruit_APDS9960::enableProximityInterrupt() {
+	_enable.PIEN = 1;
+	write8(APDS9960_ENABLE, _enable.get());
+	clearInterrupt();
+}
+
+void Adafruit_APDS9960::disableProximityInterrupt() {
+	_enable.PIEN = 0;
+	write8(APDS9960_ENABLE, _enable.get());
+}
+
+void Adafruit_APDS9960::setProximityInterruptThreshold(uint8_t low, uint8_t high){
+	write8(APDS9960_PILT, low);
+	write8(APDS9960_PILT, low); 
+}
+
+bool Adafruit_APDS9960::getProximityInterrupt()
+{
+	_status.set(this->read8(APDS9960_STATUS));
+	return _status.PINT;
+};
 
 /**************************************************************************/
 /*!
@@ -232,8 +258,13 @@ void Adafruit_APDS9960::setGestureOffset(uint8_t offset_up, uint8_t offset_down,
 /**************************************************************************/
 void Adafruit_APDS9960::enableGesture(boolean en)
 {
+  if(!en){
+	  _gconf4.GMODE = 0;
+	  write8(APDS9960_GCONF4, _gconf4.get());
+  }
   _enable.GEN = en;
   write8(APDS9960_ENABLE, _enable.get());
+  resetCounts();
 }
 
 void Adafruit_APDS9960::resetCounts()
@@ -325,18 +356,33 @@ void Adafruit_APDS9960::setLED(apds9960LedDrive_t drive, apds9960LedBoost_t boos
 
 /**************************************************************************/
 /*!
+    Enable proximity readings on APDS9960
+*/
+/**************************************************************************/
+void Adafruit_APDS9960::enableColor(boolean en)
+{
+  _enable.AEN = en;
+  write8(APDS9960_ENABLE, _enable.get());
+}
+
+bool Adafruit_APDS9960::colorDataReady()
+{
+	_status.set(this->read8(APDS9960_STATUS));
+	return _status.AVALID;
+}
+
+/**************************************************************************/
+/*!
     @brief  Reads the raw red, green, blue and clear channel values
 */
 /**************************************************************************/
-void Adafruit_APDS9960::getRawData (uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c)
+void Adafruit_APDS9960::getColorData (uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c)
 {
-  /*
+  
   *c = read16(APDS9960_CDATAL);
   *r = read16(APDS9960_RDATAL);
   *g = read16(APDS9960_GDATAL);
   *b = read16(APDS9960_BDATAL);
-  */
-  /* Set a delay for the integration time */
 
 }
 
@@ -377,10 +423,10 @@ uint16_t Adafruit_APDS9960::calculateColorTemperature(uint16_t r, uint16_t g, ui
 
 /**************************************************************************/
 /*!
-    @brief  Converts the raw R/G/B values to color temperature in degrees
-            Kelvin
+    @brief  Calculate ambient light values
 */
 /**************************************************************************/
+
 uint16_t Adafruit_APDS9960::calculateLux(uint16_t r, uint16_t g, uint16_t b)
 {
   float illuminance;
@@ -392,13 +438,18 @@ uint16_t Adafruit_APDS9960::calculateLux(uint16_t r, uint16_t g, uint16_t b)
   return (uint16_t)illuminance;
 }
 
-void Adafruit_APDS9960::setInterrupt(boolean i) {
-  _enable.AIEN = i;
+void Adafruit_APDS9960::enableColorInterrupt() {
+  _enable.AIEN = 1;
   write8(APDS9960_ENABLE, _enable.get());
 }
 
+void Adafruit_APDS9960::disableColorInterrupt() {
+	_enable.AIEN = 0;
+	write8(APDS9960_ENABLE, _enable.get());
+}
+
 void Adafruit_APDS9960::clearInterrupt(void) {
-  this->write(APDS9960_CICLEAR, NULL, 0);
+  this->write(APDS9960_AICLEAR, NULL, 0);
 }
 
 
@@ -428,6 +479,14 @@ uint32_t Adafruit_APDS9960::read32(uint8_t reg)
 	this->read(reg, ret, 4);
 	
 	return (ret[0] << 24) | (ret[1] << 16) | (ret[2] << 8) | ret[3];
+}
+
+uint16_t Adafruit_APDS9960::read16(uint8_t reg)
+{
+	uint8_t ret[2];
+	this->read(reg, ret, 2);
+	
+	return (ret[0] << 8) | ret[1];
 }
 
 

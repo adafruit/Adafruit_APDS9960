@@ -107,42 +107,6 @@
 
 /*=========================================================================*/
 
-#define APDS9960_COMMAND_BIT      (0x80)
-
-#define APDS9960_ENABLE_GEN       (0x40)    /* Gesture Enable */
-#define APDS9960_ENABLE_PIEN      (0x20)    /* Proximity Interrupt Enable */
-#define APDS9960_ENABLE_AIEN      (0x10)    /* RGBC Interrupt Enable */
-#define APDS9960_ENABLE_WEN       (0x08)    /* Wait enable - Writing 1 activates the wait timer */
-#define APDS9960_ENABLE_PEN       (0x04)    /* Prox Enable - Writing 1 actives the Prox, 0 disables it */
-#define APDS9960_ENABLE_AEN       (0x02)    /* RGBC Enable - Writing 1 actives the ADC, 0 disables it */
-#define APDS9960_ENABLE_PON       (0x01)    /* Power on - Writing 1 activates the internal oscillator, 0 disables it */
-
-#define APDS9960_WTIME_2_4MS      (0xFF)    /* WLONG0 = 2.4ms   WLONG1 = 0.029s */
-#define APDS9960_WTIME_204MS      (0xAB)    /* WLONG0 = 204ms   WLONG1 = 2.45s  */
-#define APDS9960_WTIME_614MS      (0x00)    /* WLONG0 = 614ms   WLONG1 = 7.4s   */
-
-#define APDS9960_PERS_NONE        (0b0000)  /* Every RGBC cycle generates an interrupt                                */
-#define APDS9960_PERS_1_CYCLE     (0b0001)  /* 1 clean channel value outside threshold range generates an interrupt   */
-#define APDS9960_PERS_2_CYCLE     (0b0010)  /* 2 clean channel values outside threshold range generates an interrupt  */
-#define APDS9960_PERS_3_CYCLE     (0b0011)  /* 3 clean channel values outside threshold range generates an interrupt  */
-#define APDS9960_PERS_5_CYCLE     (0b0100)  /* 5 clean channel values outside threshold range generates an interrupt  */
-#define APDS9960_PERS_10_CYCLE    (0b0101)  /* 10 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_15_CYCLE    (0b0110)  /* 15 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_20_CYCLE    (0b0111)  /* 20 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_25_CYCLE    (0b1000)  /* 25 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_30_CYCLE    (0b1001)  /* 30 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_35_CYCLE    (0b1010)  /* 35 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_40_CYCLE    (0b1011)  /* 40 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_45_CYCLE    (0b1100)  /* 45 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_50_CYCLE    (0b1101)  /* 50 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_55_CYCLE    (0b1110)  /* 55 clean channel values outside threshold range generates an interrupt */
-#define APDS9960_PERS_60_CYCLE    (0b1111)  /* 60 clean channel values outside threshold range generates an interrupt */
-
-#define APDS9960_CONFIG_WLONG     (0x02)    /* Choose between short and long (12x) wait times via APDS9960_WTIME */
-#define APDS9960_STATUS_AINT      (0x10)    /* RGBC Clean channel interrupt */
-#define APDS9960_STATUS_AVALID    (0x01)    /* Indicates that the RGBC channels have completed an integration cycle */
-
-
 typedef enum
 {
   APDS9960_AGAIN_1X                = 0x00,   /**<  No gain  */
@@ -247,7 +211,11 @@ class Adafruit_APDS9960 {
   void     setProxGain(apds9960PGain_t gain);
   apds9960PGain_t getProxGain(void);
   void     setProxPulse(apds9960PPulseLen_t pLen, uint8_t pulses);
+  void	   enableProximityInterrupt();
+  void	   disableProximityInterrupt();
   uint8_t  readProximity(void);
+  void	   setProximityInterruptThreshold(uint8_t low, uint8_t high);
+  bool	   getProximityInterrupt();
 
   // gesture
   void     enableGesture(boolean en = true);
@@ -261,10 +229,13 @@ class Adafruit_APDS9960 {
   void	   resetCounts();
 
   // light & color
-  void     getRawData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c);
+  void     enableColor(boolean en = true);
+  bool	   colorDataReady();
+  void     getColorData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c);
   uint16_t calculateColorTemperature(uint16_t r, uint16_t g, uint16_t b);
   uint16_t calculateLux(uint16_t r, uint16_t g, uint16_t b);
-  void setInterrupt(boolean flag);
+  void enableColorInterrupt();
+  void disableColorInterrupt();
   void clearInterrupt(void);
   void setIntLimits(uint16_t l, uint16_t h);
 
@@ -276,6 +247,7 @@ class Adafruit_APDS9960 {
   uint8_t _i2caddr;
  
   uint32_t read32(uint8_t reg);
+  uint16_t read16(uint8_t reg);
   
   void      write8(byte reg, byte value);
   uint8_t   read8(byte reg);
