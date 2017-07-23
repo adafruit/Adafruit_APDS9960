@@ -77,12 +77,12 @@ boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain, uint8_
   
   //default to all gesture dimensions
   setGestureDimensions(APDS9960_DIMENSIONS_ALL);
-  setGestureFIFOThreshold(ADPS9960_GFIFO_4);
-  setGestureGain(ADPS9960_GGAIN_4);
+  setGestureFIFOThreshold(APDS9960_GFIFO_4);
+  setGestureGain(APDS9960_GGAIN_4);
   setGestureProximityThreshold(50);
   resetCounts();
   
-  _gpulse.GPLEN = ADPS9960_GPULSE_32US;
+  _gpulse.GPLEN = APDS9960_GPULSE_32US;
   _gpulse.GPULSE = 9; //10 pulses
   this->write8(APDS9960_GPULSE, _gpulse.get());
   
@@ -192,9 +192,12 @@ void Adafruit_APDS9960::disableProximityInterrupt() {
 	write8(APDS9960_ENABLE, _enable.get());
 }
 
-void Adafruit_APDS9960::setProximityInterruptThreshold(uint8_t low, uint8_t high){
+void Adafruit_APDS9960::setProximityInterruptThreshold(uint8_t low, uint8_t high, uint8_t persistance){
 	write8(APDS9960_PILT, low);
-	write8(APDS9960_PILT, low); 
+	write8(APDS9960_PIHT, high);
+	if (persistance > 7) persistance = 7;
+	_pers.PPERS = persistance;
+	write8(APDS9960_PERS,_pers.get());
 }
 
 bool Adafruit_APDS9960::getProximityInterrupt()
@@ -304,13 +307,13 @@ uint8_t Adafruit_APDS9960::readGesture(void)
 		if(up_down_diff != 0){
 			if(up_down_diff < 0){
 				 if( DCount > 0){
-					 gestureReceived = ADPS9960_UP;
+					 gestureReceived = APDS9960_UP;
 				 }
 				 else UCount++;
 			}
 			else if(up_down_diff > 0){
 				 if( UCount > 0){
-					 gestureReceived = ADPS9960_DOWN;
+					 gestureReceived = APDS9960_DOWN;
 				 }
 				 else DCount++;
 			}
@@ -319,13 +322,13 @@ uint8_t Adafruit_APDS9960::readGesture(void)
 		if(left_right_diff != 0){
 			if(left_right_diff < 0){
 				 if( RCount > 0){
-					 gestureReceived = ADPS9960_LEFT;
+					 gestureReceived = APDS9960_LEFT;
 				 }
 				 else LCount++;
 			}
 			else if(left_right_diff > 0){
 				 if( LCount > 0){
-					 gestureReceived = ADPS9960_RIGHT;
+					 gestureReceived = APDS9960_RIGHT;
 				 }
 				 else RCount++;
 			}
