@@ -1,3 +1,39 @@
+/**************************************************************************/
+/*! 
+    @file     Adafruit_APDS9960.cpp
+    @author   Ladyada, Dean Miller (Adafruit Industries)
+
+    @section LICENSE
+
+    Software License Agreement (BSD License)
+
+    Copyright (c) 2017, Adafruit Industries
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+    2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+    3. Neither the name of the copyright holders nor the
+    names of its contributors may be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+/**************************************************************************/
+
 #ifdef __AVR
   #include <avr/pgmspace.h>
 #elif defined(ESP8266)
@@ -77,12 +113,12 @@ boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain, uint8_
   
   //default to all gesture dimensions
   setGestureDimensions(APDS9960_DIMENSIONS_ALL);
-  setGestureFIFOThreshold(ADPS9960_GFIFO_4);
-  setGestureGain(ADPS9960_GGAIN_4);
+  setGestureFIFOThreshold(APDS9960_GFIFO_4);
+  setGestureGain(APDS9960_GGAIN_4);
   setGestureProximityThreshold(50);
   resetCounts();
   
-  _gpulse.GPLEN = ADPS9960_GPULSE_32US;
+  _gpulse.GPLEN = APDS9960_GPULSE_32US;
   _gpulse.GPULSE = 9; //10 pulses
   this->write8(APDS9960_GPULSE, _gpulse.get());
   
@@ -194,7 +230,12 @@ void Adafruit_APDS9960::disableProximityInterrupt() {
 
 void Adafruit_APDS9960::setProximityInterruptThreshold(uint8_t low, uint8_t high){
 	write8(APDS9960_PILT, low);
-	write8(APDS9960_PILT, low); 
+	write8(APDS9960_PIHT, high); 
+}
+
+void Adafruit_APDS9960::setProximityInterruptPersistence(uint8_t cycles){
+	_pers.PPERS = cycles;
+	write8(APDS9960_PERS, _pers.get());
 }
 
 bool Adafruit_APDS9960::getProximityInterrupt()
@@ -304,13 +345,13 @@ uint8_t Adafruit_APDS9960::readGesture(void)
 		if(up_down_diff != 0){
 			if(up_down_diff < 0){
 				 if( DCount > 0){
-					 gestureReceived = ADPS9960_UP;
+					 gestureReceived = APDS9960_UP;
 				 }
 				 else UCount++;
 			}
 			else if(up_down_diff > 0){
 				 if( UCount > 0){
-					 gestureReceived = ADPS9960_DOWN;
+					 gestureReceived = APDS9960_DOWN;
 				 }
 				 else DCount++;
 			}
@@ -319,13 +360,13 @@ uint8_t Adafruit_APDS9960::readGesture(void)
 		if(left_right_diff != 0){
 			if(left_right_diff < 0){
 				 if( RCount > 0){
-					 gestureReceived = ADPS9960_LEFT;
+					 gestureReceived = APDS9960_LEFT;
 				 }
 				 else LCount++;
 			}
 			else if(left_right_diff > 0){
 				 if( LCount > 0){
-					 gestureReceived = ADPS9960_RIGHT;
+					 gestureReceived = APDS9960_RIGHT;
 				 }
 				 else RCount++;
 			}

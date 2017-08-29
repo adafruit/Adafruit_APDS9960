@@ -1,10 +1,8 @@
 /***************************************************************************
   This is a library for the APDS9960 digital proximity, ambient light, RGB, and gesture sensor
 
-  This sketch puts the sensor in gesture mode and decodes gestures.
-  To use this, first put your hand close to the sensor to enable gesture mode.
-  Then move your hand about 6" from the sensor in the up -> down, down -> up, 
-  left -> right, or right -> left direction.
+  This sketch puts the sensor in proximity mode and enables the interrupt
+  to fire when proximity goes over a set value
 
   Designed specifically to work with the Adafruit APDS9960 breakout
   ----> http://www.adafruit.com/products/3595
@@ -20,28 +18,42 @@
  ***************************************************************************/
 
 #include "Adafruit_APDS9960.h"
+
+//the pin that the interrupt is attached to
+#define INT_PIN 3
+
+//create the APDS9960 object
 Adafruit_APDS9960 apds;
 
-// the setup function runs once when you press reset or power the board
 void setup() {
   Serial.begin(115200);
-  
+  pinMode(INT_PIN, INPUT_PULLUP);
+
   if(!apds.begin()){
-	  Serial.println("failed to initialize device! Please check your wiring.");
+    Serial.println("failed to initialize device! Please check your wiring.");
   }
   else Serial.println("Device initialized!");
 
-  //gesture mode will be entered once proximity mode senses something close
+  //enable proximity mode
   apds.enableProximity(true);
-  apds.enableGesture(true);
+
+  //set the interrupt threshold to fire when proximity reading goes above 175
+  apds.setProximityInterruptThreshold(0, 175);
+
+  //require 2 consecutive cycles of > threshold readings to fire interrupt
+  apds.setProximityInterruptPersistence(2);
+
+  //enable the proximity interrupt
+  apds.enableProximityInterrupt();
 }
 
-// the loop function runs over and over again forever
 void loop() {
-	//read a gesture from the device
-  	uint8_t gesture = apds.readGesture();
-  	if(gesture == APDS9960_DOWN) Serial.println("v");
-  	if(gesture == APDS9960_UP) Serial.println("^");
-  	if(gesture == APDS9960_LEFT) Serial.println("<");
-  	if(gesture == APDS9960_RIGHT) Serial.println(">");
+
+  //print the proximity reading when the interrupt pin goes low
+  if(!digitalRead(INT_PIN)){
+    Serial.println(apds.readProximity());
+
+    //clear the interrupt
+    apds.clearInterrupt();
+  }
 }

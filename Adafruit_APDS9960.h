@@ -1,13 +1,13 @@
 /**************************************************************************/
 /*! 
     @file     Adafruit_APDS9960.h
-    @author   Ladyada (Adafruit Industries)
+    @author   Ladyada, Dean Miller (Adafruit Industries)
 
     @section LICENSE
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2013, Adafruit Industries
+    Copyright (c) 2017, Adafruit Industries
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,8 @@
 			APDS9960_AILTH = 0x85,
 			APDS9960_AIHTL = 0x86,
 			APDS9960_AIHTH = 0x87,
-			APDS9960_PILT = 0x8B,
+			APDS9960_PILT = 0x89,
+			APDS9960_PIHT = 0x8B,
 			APDS9960_PERS = 0x8C,
 			APDS9960_CONFIG1 = 0x8D,
 			APDS9960_PPULSE = 0x8E,
@@ -165,34 +166,34 @@ enum
 
 enum
 {
-	ADPS9960_GFIFO_1	= 0x00,
-	ADPS9960_GFIFO_4	= 0x01,
-	ADPS9960_GFIFO_8	= 0x02,
-	ADPS9960_GFIFO_16	= 0x03,
+	APDS9960_GFIFO_1	= 0x00,
+	APDS9960_GFIFO_4	= 0x01,
+	APDS9960_GFIFO_8	= 0x02,
+	APDS9960_GFIFO_16	= 0x03,
 };
 
 enum
 {
-	ADPS9960_GGAIN_1	= 0x00,
-	ADPS9960_GGAIN_2	= 0x01,
-	ADPS9960_GGAIN_4	= 0x02,
-	ADPS9960_GGAIN_8	= 0x03,
+	APDS9960_GGAIN_1	= 0x00,
+	APDS9960_GGAIN_2	= 0x01,
+	APDS9960_GGAIN_4	= 0x02,
+	APDS9960_GGAIN_8	= 0x03,
 };
 
 enum
 {
-	ADPS9960_GPULSE_4US		= 0x00,
-	ADPS9960_GPULSE_8US		= 0x01,
-	ADPS9960_GPULSE_16US	= 0x02,
-	ADPS9960_GPULSE_32US	= 0x03,
+	APDS9960_GPULSE_4US		= 0x00,
+	APDS9960_GPULSE_8US		= 0x01,
+	APDS9960_GPULSE_16US	= 0x02,
+	APDS9960_GPULSE_32US	= 0x03,
 };
 
-#define ADPS9960_TIME_MULT 2.78 //millisec
+#define APDS9960_TIME_MULT 2.78 //millisec
 
-#define ADPS9960_UP 0x01
-#define ADPS9960_DOWN 0x02
-#define ADPS9960_LEFT 0x03
-#define ADPS9960_RIGHT 0x04
+#define APDS9960_UP 0x01
+#define APDS9960_DOWN 0x02
+#define APDS9960_LEFT 0x03
+#define APDS9960_RIGHT 0x04
 
 class Adafruit_APDS9960 {
  public:
@@ -216,6 +217,7 @@ class Adafruit_APDS9960 {
   uint8_t  readProximity(void);
   void	   setProximityInterruptThreshold(uint8_t low, uint8_t high);
   bool	   getProximityInterrupt();
+  void	   setProximityInterruptPersistence(uint8_t cycles);
 
   // gesture
   void     enableGesture(boolean en = true);
