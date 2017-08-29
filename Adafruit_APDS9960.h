@@ -215,7 +215,7 @@ class Adafruit_APDS9960 {
   void	   enableProximityInterrupt();
   void	   disableProximityInterrupt();
   uint8_t  readProximity(void);
-  void	   setProximityInterruptThreshold(uint8_t low, uint8_t high);
+  void	   setProximityInterruptThreshold(uint8_t low, uint8_t high, uint8_t persistance = 4);
   bool	   getProximityInterrupt();
   void	   setProximityInterruptPersistence(uint8_t cycles);
 
@@ -296,10 +296,10 @@ class Adafruit_APDS9960 {
 	struct enable _enable;
 	
 	struct pers {
-		//proximity interrupt persistence, controls rate of prox interrupt to host processor
+		//ALS Interrupt Persistence. Controls rate of Clear channel interrupt to the host processor
 		uint8_t APERS : 4;
 		
-		//ALS Interrupt Persistence. Controls rate of Clear channel interrupt to the host processor
+		//proximity interrupt persistence, controls rate of prox interrupt to host processor
 		uint8_t PPERS : 4;
 		
 		uint8_t get(){

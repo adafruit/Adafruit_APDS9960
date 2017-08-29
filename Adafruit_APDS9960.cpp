@@ -228,14 +228,15 @@ void Adafruit_APDS9960::disableProximityInterrupt() {
 	write8(APDS9960_ENABLE, _enable.get());
 }
 
-void Adafruit_APDS9960::setProximityInterruptThreshold(uint8_t low, uint8_t high){
+void Adafruit_APDS9960::setProximityInterruptThreshold(uint8_t low, uint8_t high, uint8_t persistance){
 	write8(APDS9960_PILT, low);
 	write8(APDS9960_PIHT, high); 
 }
 
 void Adafruit_APDS9960::setProximityInterruptPersistence(uint8_t cycles){
+	if (cycles > 7) cycles = 7;
 	_pers.PPERS = cycles;
-	write8(APDS9960_PERS, _pers.get());
+	write8(APDS9960_PERS,_pers.get());
 }
 
 bool Adafruit_APDS9960::getProximityInterrupt()

@@ -27,7 +27,7 @@ void setup() {
   Serial.begin(115200);
   
   if(!apds.begin()){
-	  Serial.println("failed to initialize device! Please check your wiring.");
+    Serial.println("failed to initialize device! Please check your wiring.");
   }
   else Serial.println("Device initialized!");
 
@@ -38,10 +38,10 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-	//read a gesture from the device
-  	uint8_t gesture = apds.readGesture();
-  	if(gesture == APDS9960_DOWN) Serial.println("v");
-  	if(gesture == APDS9960_UP) Serial.println("^");
-  	if(gesture == APDS9960_LEFT) Serial.println("<");
-  	if(gesture == APDS9960_RIGHT) Serial.println(">");
+  //read a gesture from the device
+    uint8_t gesture = apds.readGesture();
+    if(gesture == APDS9960_DOWN) Serial.println("v");
+    if(gesture == APDS9960_UP) Serial.println("^");
+    if(gesture == APDS9960_LEFT) Serial.println("<");
+    if(gesture == APDS9960_RIGHT) Serial.println(">");
 }
