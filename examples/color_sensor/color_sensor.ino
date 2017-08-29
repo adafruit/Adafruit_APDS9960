@@ -1,8 +1,7 @@
 /***************************************************************************
   This is a library for the APDS9960 digital proximity, ambient light, RGB, and gesture sensor
 
-  This sketch puts the sensor in proximity mode and enables the interrupt
-  to fire when proximity goes over a set value
+  This sketch puts the sensor in color mode and reads the RGB and clear values.
 
   Designed specifically to work with the Adafruit APDS9960 breakout
   ----> http://www.adafruit.com/products/3595
@@ -18,42 +17,43 @@
  ***************************************************************************/
 
 #include "Adafruit_APDS9960.h"
-
-//the pin that the interrupt is attached to
-#define INT_PIN 3
-
-//create the APDS9960 object
 Adafruit_APDS9960 apds;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(INT_PIN, INPUT_PULLUP);
 
   if(!apds.begin()){
     Serial.println("failed to initialize device! Please check your wiring.");
   }
   else Serial.println("Device initialized!");
 
-  //enable proximity mode
-  apds.enableProximity(true);
-
-  //set the interrupt threshold to fire when proximity reading goes above 175
-  apds.setProximityInterruptThreshold(0, 175);
-
-  //require 2 consecutive cycles of > threshold readings to fire interrupt
-  apds.setProximityInterruptPersistence(2);
-
-  //enable the proximity interrupt
-  apds.enableProximityInterrupt();
+  //enable color sensign mode
+  apds.enableColor(true);
 }
 
 void loop() {
-
-  //print the proximity reading when the interrupt pin goes low
-  if(!digitalRead(INT_PIN)){
-    Serial.println(apds.readProximity());
-
-    //clear the interrupt
-    apds.clearInterrupt();
+  //create some variables to store the color data in
+  uint16_t r, g, b, c;
+  
+  //wait for color data to be ready
+  while(!apds.colorDataReady()){
+    delay(5);
   }
+
+  //get the data and print the different channels
+  apds.getColorData(&r, &g, &b, &c);
+  Serial.print("red: ");
+  Serial.print(r);
+  
+  Serial.print(" green: ");
+  Serial.print(g);
+  
+  Serial.print(" blue: ");
+  Serial.print(b);
+  
+  Serial.print(" clear: ");
+  Serial.println(c);
+  Serial.println();
+  
+  delay(500);
 }

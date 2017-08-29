@@ -217,7 +217,6 @@ class Adafruit_APDS9960 {
   uint8_t  readProximity(void);
   void	   setProximityInterruptThreshold(uint8_t low, uint8_t high, uint8_t persistance = 4);
   bool	   getProximityInterrupt();
-  void	   setProximityInterruptPersistence(uint8_t cycles);
 
   // gesture
   void     enableGesture(boolean en = true);
