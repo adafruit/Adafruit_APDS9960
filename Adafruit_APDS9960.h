@@ -200,7 +200,7 @@ class Adafruit_APDS9960 {
   Adafruit_APDS9960(void) {};
   ~Adafruit_APDS9960(void) {};
   
-  boolean  begin(uint16_t iTimeMS = 10, apds9960AGain_t = APDS9960_AGAIN_1X, uint8_t addr = APDS9960_ADDRESS);
+  boolean  begin(uint16_t iTimeMS = 10, apds9960AGain_t = APDS9960_AGAIN_4X, uint8_t addr = APDS9960_ADDRESS);
   void     setADCIntegrationTime(uint16_t iTimeMS);
   float    getADCIntegrationTime(void);
   void     setADCGain(apds9960AGain_t gain);
