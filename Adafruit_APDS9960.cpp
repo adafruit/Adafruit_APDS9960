@@ -113,7 +113,7 @@ boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain, uint8_
   
   //default to all gesture dimensions
   setGestureDimensions(APDS9960_DIMENSIONS_ALL);
-  setGestureFIFOThreshold(APDS9960_GFIFO_4);
+  setGestureFIFOThreshold(APDS9960_GFIFO_8);
   setGestureGain(APDS9960_GGAIN_4);
   setGestureProximityThreshold(50);
   resetCounts();
@@ -328,19 +328,18 @@ uint8_t Adafruit_APDS9960::readGesture(void)
 		gestureReceived = 0;
 		if(!gestureValid()) return 0;
 		
-		delay(30);
+		delay(35);
 		toRead = this->read8(APDS9960_GFLVL);
+		delayMicroseconds(50);
 		
 		bytesRead = this->read(APDS9960_GFIFO_U, buf, toRead);
-		
-		for(int i=0; i<(bytesRead >> 2); i++){
-			if(abs((int)buf[0] - (int)buf[1]) > 13)
-				up_down_diff += (int)buf[0] - (int)buf[1];
-		}
-		for(int i=0; i<(bytesRead >> 2); i++){
-			if(abs((int)buf[2] - (int)buf[3]) > 13)
-				left_right_diff += (int)buf[2] - (int)buf[3];
-		}
+
+    if(abs((int)buf[0] - (int)buf[1]) > 13)
+      up_down_diff += (int)buf[0] - (int)buf[1];
+
+    if(abs((int)buf[2] - (int)buf[3]) > 13)
+      left_right_diff += (int)buf[2] - (int)buf[3];
+
 		if(up_down_diff != 0){
 			if(up_down_diff < 0){
 				 if( DCount > 0){
@@ -533,6 +532,7 @@ uint16_t Adafruit_APDS9960::read16(uint8_t reg)
 void Adafruit_APDS9960::_i2c_init()
 {
 	Wire.begin();
+	Wire.setClock(10000);
 }
 
 uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num)
@@ -548,6 +548,7 @@ uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num)
 		Wire.beginTransmission((uint8_t)_i2caddr);
 		Wire.write((uint8_t)reg + pos);
 		Wire.endTransmission();
+		
 		Wire.requestFrom((uint8_t)_i2caddr, read_now);
 		
 		for(int i=0; i<read_now; i++){
