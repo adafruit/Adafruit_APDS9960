@@ -330,7 +330,6 @@ uint8_t Adafruit_APDS9960::readGesture(void)
 		
 		delay(30);
 		toRead = this->read8(APDS9960_GFLVL);
-		delayMicroseconds(50);
 		
 		bytesRead = this->read(APDS9960_GFIFO_U, buf, toRead);
 
@@ -532,7 +531,6 @@ uint16_t Adafruit_APDS9960::read16(uint8_t reg)
 void Adafruit_APDS9960::_i2c_init()
 {
 	Wire.begin();
-	Wire.setClock(10000);
 }
 
 uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num)
