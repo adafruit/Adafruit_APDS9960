@@ -113,7 +113,7 @@ boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain, uint8_
   
   //default to all gesture dimensions
   setGestureDimensions(APDS9960_DIMENSIONS_ALL);
-  setGestureFIFOThreshold(APDS9960_GFIFO_8);
+  setGestureFIFOThreshold(APDS9960_GFIFO_4);
   setGestureGain(APDS9960_GGAIN_4);
   setGestureProximityThreshold(50);
   resetCounts();
@@ -328,7 +328,7 @@ uint8_t Adafruit_APDS9960::readGesture(void)
 		gestureReceived = 0;
 		if(!gestureValid()) return 0;
 		
-		delay(35);
+		delay(30);
 		toRead = this->read8(APDS9960_GFLVL);
 		delayMicroseconds(50);
 		
