@@ -249,6 +249,7 @@ class Adafruit_APDS9960 {
  
   uint32_t read32(uint8_t reg);
   uint16_t read16(uint8_t reg);
+  uint16_t read16R(uint8_t reg);
   
   void      write8(byte reg, byte value);
   uint8_t   read8(byte reg);

@@ -417,10 +417,10 @@ bool Adafruit_APDS9960::colorDataReady()
 void Adafruit_APDS9960::getColorData (uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c)
 {
   
-  *c = read16(APDS9960_CDATAL);
-  *r = read16(APDS9960_RDATAL);
-  *g = read16(APDS9960_GDATAL);
-  *b = read16(APDS9960_BDATAL);
+  *c = read16R(APDS9960_CDATAL);
+  *r = read16R(APDS9960_RDATAL);
+  *g = read16R(APDS9960_GDATAL);
+  *b = read16R(APDS9960_BDATAL);
 
 }
 
@@ -527,6 +527,13 @@ uint16_t Adafruit_APDS9960::read16(uint8_t reg)
 	return (ret[0] << 8) | ret[1];
 }
 
+uint16_t Adafruit_APDS9960::read16R(uint8_t reg)
+{
+  uint8_t ret[2];
+  this->read(reg, ret, 2);
+  
+  return (ret[1] << 8) | ret[0];
+}
 
 void Adafruit_APDS9960::_i2c_init()
 {
