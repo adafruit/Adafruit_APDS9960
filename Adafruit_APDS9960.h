@@ -266,7 +266,7 @@ class Adafruit_APDS9960 {
   void write(uint8_t reg, uint8_t *buf, uint8_t num);
   void _i2c_init();
   
-  struct enable {
+  union enable {
 		
 		//power on
 		uint8_t PON : 1;
@@ -461,7 +461,7 @@ class Adafruit_APDS9960 {
 		uint8_t GFIFOTH : 2;
 		
 		uint8_t get(){
-			return (GFIFOTH << 7) | (GEXMSK << 5) | GEXPERS;
+			return (GFIFOTH << 6) | (GEXMSK << 2) | GEXPERS;
 		}
 	};
 	gconf1 _gconf1;
