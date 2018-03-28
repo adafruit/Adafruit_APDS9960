@@ -266,7 +266,7 @@ class Adafruit_APDS9960 {
   void write(uint8_t reg, uint8_t *buf, uint8_t num);
   void _i2c_init();
   
-  union enable {
+  struct enable {
 		
 		//power on
 		uint8_t PON : 1;
