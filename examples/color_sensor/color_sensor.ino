@@ -19,13 +19,28 @@
 #include "Adafruit_APDS9960.h"
 Adafruit_APDS9960 apds;
 
+#ifdef RASPBERRY_PI
+#include <stdio.h>
+#include <stdlib.h>
+#endif // ifdef RASPBERRY_PI
+
 void setup() {
+#ifndef RASPBERRY_PI
   Serial.begin(115200);
 
   if(!apds.begin()){
     Serial.println("failed to initialize device! Please check your wiring.");
   }
   else Serial.println("Device initialized!");
+#else // ifndef RASPBERRY_PI
+  wiringPiSetup();
+
+  if(!apds.begin()){
+    puts("failed to initialize device! Please check your wiring.\n");
+    abort();
+  }
+  else puts("Device initialized!");
+#endif // ifndef RASPBERRY_PI
 
   //enable color sensign mode
   apds.enableColor(true);
@@ -42,6 +57,8 @@ void loop() {
 
   //get the data and print the different channels
   apds.getColorData(&r, &g, &b, &c);
+
+#ifndef RASPBERRY_PI
   Serial.print("red: ");
   Serial.print(r);
   
@@ -54,6 +71,16 @@ void loop() {
   Serial.print(" clear: ");
   Serial.println(c);
   Serial.println();
-  
+#else // ifndef RASPBERRY_PI
+  printf("red: %d green: %d blue: %d clear: %d\n", r, g, b, c);
+#endif // ifndef RASPBERRY_PI
+
   delay(500);
 }
+
+#ifdef RASPBERRY_PI
+int main(int argc, char* argv[]) {
+  setup();
+  while (true) loop();
+}
+#endif // ifdef RASPBERRY_PI

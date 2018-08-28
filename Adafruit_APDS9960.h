@@ -36,10 +36,35 @@
 #ifndef _APDS9960_H_
 #define _APDS9960_H_
 
+#ifndef RASPBERRY_PI
+
 #include <Arduino.h>
 #include <Wire.h>
 
 #define I2CDEBUG
+
+#else // ifndef RASPBERRY_PI
+
+#include <wiringPi.h>
+#include <wiringPiI2C.h>
+
+#ifndef boolean
+typedef bool boolean;
+#endif
+#ifndef byte
+typedef char byte;
+#endif
+#ifndef uint8_t
+typedef unsigned char uint8_t;
+#endif
+#ifndef uint16_t
+typedef unsigned short uint16_t;
+#endif
+#ifndef uint32_t
+typedef unsigned int uint32_t;
+#endif
+
+#endif // ifndef RASPBERRY_PI
 
 /*=========================================================================
     I2C ADDRESS/BITS
@@ -553,6 +578,9 @@ class Adafruit_APDS9960 {
 	};
 	gstatus _gstatus;
   
+#ifdef RASPBERRY_PI
+	int _i2cfd;
+#endif // ifdef RASPBERRY_PI
 };
 
 #endif

@@ -19,6 +19,11 @@
 
 #include "Adafruit_APDS9960.h"
 
+#ifdef RASPBERRY_PI
+#include <stdio.h>
+#include <stdlib.h>
+#endif // ifndef RASPBERRY_PI
+
 //the pin that the interrupt is attached to
 #define INT_PIN 3
 
@@ -26,6 +31,7 @@
 Adafruit_APDS9960 apds;
 
 void setup() {
+#ifndef RASPBERRY_PI
   Serial.begin(115200);
   pinMode(INT_PIN, INPUT_PULLUP);
 
@@ -33,6 +39,16 @@ void setup() {
     Serial.println("failed to initialize device! Please check your wiring.");
   }
   else Serial.println("Device initialized!");
+#else  // ifndef RASPBERRY_PI
+  wiringPiSetup();
+  pinMode(INT_PIN, INPUT);
+  pullUpDnControl(INT_PIN, PUD_UP);
+
+  if(!apds.begin()){
+    puts("failed to initialize device! Please check your wiring.\n");
+    abort();
+  } else puts("Device initialized!");
+#endif // ifndef RASPBERRY_PI
 
   //enable proximity mode
   apds.enableProximity(true);
@@ -48,9 +64,20 @@ void loop() {
 
   //print the proximity reading when the interrupt pin goes low
   if(!digitalRead(INT_PIN)){
+#ifndef RASPBERRY_PI
     Serial.println(apds.readProximity());
+#else // ifndef RASPBERRY_PI
+    printf("%d\n", (int)apds.readProximity());
+#endif // ifndef RASPBERRY_PI
 
     //clear the interrupt
     apds.clearInterrupt();
   }
 }
+
+#ifdef RASPBERRY_PI
+int main(int argc, char* argv[]) {
+  setup();
+  while (true) loop();
+}
+#endif // ifdef RASPBERRY_PI

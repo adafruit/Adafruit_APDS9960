@@ -22,14 +22,29 @@
 #include "Adafruit_APDS9960.h"
 Adafruit_APDS9960 apds;
 
+#ifdef RASPBERRY_PI
+#include <stdio.h>
+#include <stdlib.h>
+#endif // ifdef RASPBERRY_PI
+
 // the setup function runs once when you press reset or power the board
 void setup() {
+#ifndef RASPBERRY_PI
   Serial.begin(115200);
   
   if(!apds.begin()){
     Serial.println("failed to initialize device! Please check your wiring.");
   }
   else Serial.println("Device initialized!");
+#else // ifndef RASPBERRY_PI
+  wiringPiSetup();
+
+  if(!apds.begin()){
+    puts("failed to initialize device! Please check your wiring.\n");
+    abort();
+  }
+  else puts("Device initialized!");
+#endif // ifndef RASPBERRY_PI
 
   //gesture mode will be entered once proximity mode senses something close
   apds.enableProximity(true);
@@ -40,8 +55,22 @@ void setup() {
 void loop() {
   //read a gesture from the device
     uint8_t gesture = apds.readGesture();
+#ifndef RASPBERRY_PI
     if(gesture == APDS9960_DOWN) Serial.println("v");
     if(gesture == APDS9960_UP) Serial.println("^");
     if(gesture == APDS9960_LEFT) Serial.println("<");
     if(gesture == APDS9960_RIGHT) Serial.println(">");
+#else // ifndef RASPBERRY_PI
+    if(gesture == APDS9960_DOWN) puts("v");
+    if(gesture == APDS9960_UP) puts("^");
+    if(gesture == APDS9960_LEFT) puts("<");
+    if(gesture == APDS9960_RIGHT) puts(">");
+#endif // ifndef RASPBERRY_PI
 }
+
+#ifdef RASPBERRY_PI
+int main(int argc, char* argv[]) {
+  setup();
+  while (true) loop();
+}
+#endif // ifdef RASPBERRY_PI
