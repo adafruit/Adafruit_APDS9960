@@ -82,8 +82,8 @@ void Adafruit_APDS9960::enable(boolean en)
 /**************************************************************************/
 boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain, uint8_t addr) 
 {
-  _i2c_init();
   _i2caddr = addr;
+  _i2c_init();
    
   /* Make sure we're actually connected */
   uint8_t x = read8(APDS9960_ID);
@@ -500,7 +500,7 @@ void Adafruit_APDS9960::setIntLimits(uint16_t low, uint16_t high) {
 
 void Adafruit_APDS9960::write8(byte reg, byte value)
 {
-	this->write(reg, &value, 1);
+	this->write(reg, (uint8_t*) &value, 1);
 }
 
 uint8_t Adafruit_APDS9960::read8(byte reg)
@@ -537,11 +537,16 @@ uint16_t Adafruit_APDS9960::read16R(uint8_t reg)
 
 void Adafruit_APDS9960::_i2c_init()
 {
+#ifndef RASPBERRY_PI
 	Wire.begin();
+#else // ifndef RASPBERRY_PI
+	_i2cfd = wiringPiI2CSetup((int) _i2caddr);
+#endif // ifndef RASPBERRY_PI
 }
 
 uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num)
 {
+#ifndef RASPBERRY_PI
 	uint8_t value;
 	uint8_t pos = 0;
 	bool eof = false;
@@ -565,13 +570,31 @@ uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num)
 			pos++;
 		}
 	}
+#else // ifndef RASPBERRY_PI
+	uint8_t pos = 0;
+	int value;
+
+	for(int i=0; i<num; i++){
+	  value = wiringPiI2CReadReg8(_i2cfd, reg + pos);
+	  if (value == -1)
+	    break;
+	  buf[pos] = (uint8_t) value;
+	  pos++;
+	}
+#endif // ifndef RASPBERRY_PI
 	return pos;
 }
 
 void Adafruit_APDS9960::write(uint8_t reg, uint8_t *buf, uint8_t num)
 {
+#ifndef RASPBERRY_PI
 	Wire.beginTransmission((uint8_t)_i2caddr);
 	Wire.write((uint8_t)reg);
 	Wire.write((uint8_t *)buf, num);
 	Wire.endTransmission();
+#else // ifndef RASPBERRY_PI
+	for(int i=0; i<num; i++){
+	  wiringPiI2CWriteReg8(_i2cfd, reg + i, buf[i]);
+	}
+#endif // ifndef RASPBERRY_PI
 }
