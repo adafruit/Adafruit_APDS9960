@@ -161,6 +161,7 @@ enum
 {
 	APDS9960_DIMENSIONS_ALL		= 0x00,
 	APDS9960_DIMENSIONS_UP_DOWM  = 0x01,
+	APDS9960_DIMENSIONS_UP_DOWN  = 0x01,
 	APGS9960_DIMENSIONS_LEFT_RIGHT = 0x02,	
 };
 
@@ -443,13 +444,13 @@ class Adafruit_APDS9960 {
 	config3 _config3;
 	
 	struct gconf1 {
-		/* Gesture Exit Persistence. When a number of consecutive “gesture end” occurrences become
+		/* Gesture Exit Persistence. When a number of consecutive Â“gesture endÂ” occurrences become
 		equal or greater to the GEPERS value, the Gesture state machine is exited.
 		*/
 		uint8_t GEXPERS : 2;
 		
 		/* Gesture Exit Mask. Controls which of the gesture detector photodiodes (UDLR) will be included
-		to determine a “gesture end” and subsequent exit of the gesture state machine. Unmasked
+		to determine a Â“gesture endÂ” and subsequent exit of the gesture state machine. Unmasked
 		UDLR data will be compared with the value in GTHR_OUT. Field value bits correspond to UDLR
 		detectors.
 		*/
