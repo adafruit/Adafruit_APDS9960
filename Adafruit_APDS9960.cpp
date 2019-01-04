@@ -611,7 +611,7 @@ void Adafruit_APDS9960::write8(byte reg, byte value) {
 }
 
 /*!
- *  @brief  Reads 8 bytes from specified register
+ *  @brief  Reads 8 bits from specified register
  *  @param  reg
  *          Register to write to
  *  @return Value in register
@@ -624,7 +624,7 @@ uint8_t Adafruit_APDS9960::read8(byte reg) {
 }
 
 /*!
- *  @brief  Reads 32 bytes from specified register
+ *  @brief  Reads 32 bits from specified register
  *  @param  reg
  *          Register to write to
  *  @return Value in register
@@ -637,7 +637,7 @@ uint32_t Adafruit_APDS9960::read32(uint8_t reg) {
 }
 
 /*!
- *  @brief  Reads 16 bytes from specified register
+ *  @brief  Reads 16 bites from specified register
  *  @param  reg
  *          Register to write to
  *  @return Value in register
@@ -650,7 +650,7 @@ uint16_t Adafruit_APDS9960::read16(uint8_t reg) {
 }
 
 /*!
- *  @brief  Reads 16 bytes from specified register
+ *  @brief  Reads 16 bites from specified register
  *  @param  reg
  *          Register to write to
  *  @return Value in register
