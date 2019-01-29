@@ -388,7 +388,7 @@ void Adafruit_APDS9960::resetCounts() {
  *          APDS9960_RIGHT)
  */
 uint8_t Adafruit_APDS9960::readGesture() {
-  uint8_t toRead;
+  uint8_t toRead, bytesRead;
   uint8_t buf[256];
   unsigned long t = 0;
   uint8_t gestureReceived;
@@ -401,6 +401,9 @@ uint8_t Adafruit_APDS9960::readGesture() {
 
     delay(30);
     toRead = this->read8(APDS9960_GFLVL);
+
+    // bytesRead is unused but produces sideffects needed for readGesture to work
+    bytesRead = this->read(APDS9960_GFIFO_U, buf, toRead);
 
     if (abs((int)buf[0] - (int)buf[1]) > 13)
       up_down_diff += (int)buf[0] - (int)buf[1];
