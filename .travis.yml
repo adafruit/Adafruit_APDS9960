@@ -5,7 +5,6 @@ cache:
   directories:
     - ~/arduino_ide
     - ~/.arduino15/packages/
-    - /bin/
 
 git:
   depth: false
