@@ -74,9 +74,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2dea969d8f98db0e91a4ba5f30a7fcb1"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___a_p_d_s9960.html#a2dea969d8f98db0e91a4ba5f30a7fcb1">begin</a> (uint16_t iTimeMS=10, <a class="el" href="_adafruit___a_p_d_s9960_8h.html#a4dafc3938d059dd2a9ebae5b51efc098">apds9960AGain_t</a>=<a class="el" href="_adafruit___a_p_d_s9960_8h.html#a4dafc3938d059dd2a9ebae5b51efc098a69a1d72d94b2559c7bbb9148babc13ac">APDS9960_AGAIN_4X</a>, uint8_t addr=<a class="el" href="_adafruit___a_p_d_s9960_8h.html#a21474842065b4dfcebf7452613bf8377">APDS9960_ADDRESS</a>)</td></tr>
-<tr class="memdesc:a2dea969d8f98db0e91a4ba5f30a7fcb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes I2C and configures the sensor.  <a href="#a2dea969d8f98db0e91a4ba5f30a7fcb1">More...</a><br /></td></tr>
-<tr class="separator:a2dea969d8f98db0e91a4ba5f30a7fcb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a668b277f77ae203c305d111846f2a90d"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___a_p_d_s9960.html#a668b277f77ae203c305d111846f2a90d">begin</a> (uint16_t iTimeMS=10, <a class="el" href="_adafruit___a_p_d_s9960_8h.html#a4dafc3938d059dd2a9ebae5b51efc098">apds9960AGain_t</a>=<a class="el" href="_adafruit___a_p_d_s9960_8h.html#a4dafc3938d059dd2a9ebae5b51efc098a69a1d72d94b2559c7bbb9148babc13ac">APDS9960_AGAIN_4X</a>, uint8_t addr=<a class="el" href="_adafruit___a_p_d_s9960_8h.html#a21474842065b4dfcebf7452613bf8377">APDS9960_ADDRESS</a>, TwoWire *theWire=&amp;Wire)</td></tr>
+<tr class="memdesc:a668b277f77ae203c305d111846f2a90d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes I2C and configures the sensor.  <a href="#a668b277f77ae203c305d111846f2a90d">More...</a><br /></td></tr>
+<tr class="separator:a668b277f77ae203c305d111846f2a90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87a2698990d7c917e49ef924a398af4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___a_p_d_s9960.html#a87a2698990d7c917e49ef924a398af4e">setADCIntegrationTime</a> (uint16_t iTimeMS)</td></tr>
 <tr class="memdesc:a87a2698990d7c917e49ef924a398af4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the integration time for the ADC of the APDS9960, in millis.  <a href="#a87a2698990d7c917e49ef924a398af4e">More...</a><br /></td></tr>
 <tr class="separator:a87a2698990d7c917e49ef924a398af4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,8 +186,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that stores state and functions for interacting with APDS9960 Sensor. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a2dea969d8f98db0e91a4ba5f30a7fcb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2dea969d8f98db0e91a4ba5f30a7fcb1">&#9670;&nbsp;</a></span>begin()</h2>
+<a id="a668b277f77ae203c305d111846f2a90d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a668b277f77ae203c305d111846f2a90d">&#9670;&nbsp;</a></span>begin()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,7 +208,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>addr</em> = <code><a class="el" href="_adafruit___a_p_d_s9960_8h.html#a21474842065b4dfcebf7452613bf8377">APDS9960_ADDRESS</a></code>&#160;</td>
+          <td class="paramname"><em>addr</em> = <code><a class="el" href="_adafruit___a_p_d_s9960_8h.html#a21474842065b4dfcebf7452613bf8377">APDS9960_ADDRESS</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TwoWire *&#160;</td>
+          <td class="paramname"><em>theWire</em> = <code>&amp;Wire</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -224,6 +230,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
     <tr><td class="paramname">iTimeMS</td><td>Integration time </td></tr>
     <tr><td class="paramname">aGain</td><td>Gain </td></tr>
     <tr><td class="paramname">addr</td><td>I2C address </td></tr>
+    <tr><td class="paramname">*theWire</td><td>Wire object </td></tr>
   </table>
   </dd>
 </dl>
