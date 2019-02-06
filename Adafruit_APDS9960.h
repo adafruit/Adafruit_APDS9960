@@ -176,7 +176,7 @@ public:
   ~Adafruit_APDS9960(){};
 
   boolean begin(uint16_t iTimeMS = 10, apds9960AGain_t = APDS9960_AGAIN_4X,
-                uint8_t addr = APDS9960_ADDRESS);
+                uint8_t addr = APDS9960_ADDRESS, TwoWire *theWire = &Wire);
   void setADCIntegrationTime(uint16_t iTimeMS);
   float getADCIntegrationTime();
   void setADCGain(apds9960AGain_t gain);
@@ -223,6 +223,7 @@ public:
 
 private:
   uint8_t _i2caddr;
+  TwoWire *_wire;
 
   uint32_t read32(uint8_t reg);
   uint16_t read16(uint8_t reg);
