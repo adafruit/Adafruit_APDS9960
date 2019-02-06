@@ -78,6 +78,8 @@ void Adafruit_APDS9960::enable(boolean en) {
  *          Gain
  *  @param  addr
  *          I2C address
+ *  @param  *theWire
+ *          Wire object
  *  @return True if initialization was successful, otherwise false.
  */
 boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain,
