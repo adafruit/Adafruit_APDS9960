@@ -78,12 +78,15 @@ void Adafruit_APDS9960::enable(boolean en) {
  *          Gain
  *  @param  addr
  *          I2C address
+ *  @param  *theWire
+ *          Wire object
  *  @return True if initialization was successful, otherwise false.
  */
 boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain,
-                                 uint8_t addr) {
+                                 uint8_t addr, TwoWire *theWire) {
   _i2c_init();
   _i2caddr = addr;
+  _wire = theWire;
 
   /* Make sure we're actually connected */
   uint8_t x = read8(APDS9960_ID);
@@ -668,7 +671,7 @@ uint16_t Adafruit_APDS9960::read16R(uint8_t reg) {
 /*!
  *  @brief  Begins I2C communication
  */
-void Adafruit_APDS9960::_i2c_init() { Wire.begin(); }
+void Adafruit_APDS9960::_i2c_init() { _wire->begin(); }
 
 /*!
  *  @brief  Reads num bytes from specified register into a given buffer
@@ -688,18 +691,18 @@ uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num) {
   while (pos < num && !eof) {
 
     uint8_t read_now = min(32, num - pos);
-    Wire.beginTransmission((uint8_t)_i2caddr);
-    Wire.write((uint8_t)reg + pos);
-    Wire.endTransmission();
+    _wire->beginTransmission((uint8_t)_i2caddr);
+    _wire->write((uint8_t)reg + pos);
+    _wire->endTransmission();
 
-    Wire.requestFrom((uint8_t)_i2caddr, read_now);
+    _wire->requestFrom((uint8_t)_i2caddr, read_now);
 
     for (int i = 0; i < read_now; i++) {
-      if (!Wire.available()) {
+      if (!_wire->available()) {
         eof = true;
         break;
       }
-      buf[pos] = Wire.read();
+      buf[pos] = _wire->read();
       pos++;
     }
   }
@@ -716,8 +719,8 @@ uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num) {
  *          Number of bytes
  */
 void Adafruit_APDS9960::write(uint8_t reg, uint8_t *buf, uint8_t num) {
-  Wire.beginTransmission((uint8_t)_i2caddr);
-  Wire.write((uint8_t)reg);
-  Wire.write((uint8_t *)buf, num);
-  Wire.endTransmission();
+  _wire->beginTransmission((uint8_t)_i2caddr);
+  _wire->write((uint8_t)reg);
+  _wire->write((uint8_t *)buf, num);
+  _wire->endTransmission();
 }
