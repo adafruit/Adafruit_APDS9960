@@ -11,10 +11,8 @@ This chip uses I2C to communicate, 2 pins are required to interface
 
 Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
 
-Written by 
-
-Dean Miller, Limor Fried for Adafruit Industries.  
+Written by Dean Miller, Limor Fried for Adafruit Industries.  
 BSD license, check license.txt for more information
 All text above must be included in any redistribution
 
-To install, use the Arduino Library Manager and search for "Adafruit APDS9960" and install the library.
+To install, use the Arduino Library Manager and search for "Adafruit APDS9960 Library" and install the library.
