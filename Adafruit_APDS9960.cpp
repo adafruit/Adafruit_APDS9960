@@ -84,9 +84,9 @@ void Adafruit_APDS9960::enable(boolean en) {
  */
 boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain,
                                  uint8_t addr, TwoWire *theWire) {
+  _wire = theWire;
   _i2c_init();
   _i2caddr = addr;
-  _wire = theWire;
 
   /* Make sure we're actually connected */
   uint8_t x = read8(APDS9960_ID);
