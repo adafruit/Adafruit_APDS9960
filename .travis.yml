@@ -12,7 +12,6 @@ git:
 
 env:
   global:
-    - ARDUINO_IDE_VERSION="1.8.7"
     - PRETTYNAME="Adafruit APDS9960 Library"
 
 before_install:
