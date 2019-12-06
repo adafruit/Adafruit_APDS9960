@@ -470,7 +470,7 @@ void Adafruit_APDS9960::setLED(apds9960LedDrive_t drive,
 }
 
 /*!
- *  @brief  Enable proximity readings on APDS9960
+ *  @brief  Enable color readings on APDS9960
  *  @param  en
  *          Enable (True/False)
  */
