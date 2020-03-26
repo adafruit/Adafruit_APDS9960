@@ -405,7 +405,8 @@ uint8_t Adafruit_APDS9960::readGesture() {
     delay(30);
     toRead = this->read8(APDS9960_GFLVL);
 
-    // bytesRead is unused but produces sideffects needed for readGesture to work
+    // bytesRead is unused but produces sideffects needed for readGesture to
+    // work
     bytesRead = this->read(APDS9960_GFIFO_U, buf, toRead);
 
     if (abs((int)buf[0] - (int)buf[1]) > 13)
