@@ -101,33 +101,33 @@ typedef enum {
 /** Proxmity gain settings */
 typedef enum {
   APDS9960_PGAIN_1X = 0x00, /**< 1x gain */
-  APDS9960_PGAIN_2X = 0x04, /**< 2x gain */
-  APDS9960_PGAIN_4X = 0x08, /**< 4x gain */
-  APDS9960_PGAIN_8X = 0x0C  /**< 8x gain */
+  APDS9960_PGAIN_2X = 0x01, /**< 2x gain */
+  APDS9960_PGAIN_4X = 0x02, /**< 4x gain */
+  APDS9960_PGAIN_8X = 0x03  /**< 8x gain */
 } apds9960PGain_t;
 
 /** Pulse length settings */
 typedef enum {
   APDS9960_PPULSELEN_4US = 0x00,  /**< 4uS */
-  APDS9960_PPULSELEN_8US = 0x40,  /**< 8uS */
-  APDS9960_PPULSELEN_16US = 0x80, /**< 16uS */
-  APDS9960_PPULSELEN_32US = 0xC0  /**< 32uS */
+  APDS9960_PPULSELEN_8US = 0x01,  /**< 8uS */
+  APDS9960_PPULSELEN_16US = 0x02, /**< 16uS */
+  APDS9960_PPULSELEN_32US = 0x03  /**< 32uS */
 } apds9960PPulseLen_t;
 
 /** LED drive settings */
 typedef enum {
   APDS9960_LEDDRIVE_100MA = 0x00, /**< 100mA */
-  APDS9960_LEDDRIVE_50MA = 0x40,  /**< 50mA */
-  APDS9960_LEDDRIVE_25MA = 0x80,  /**< 25mA */
-  APDS9960_LEDDRIVE_12MA = 0xC0   /**< 12.5mA */
+  APDS9960_LEDDRIVE_50MA = 0x01,  /**< 50mA */
+  APDS9960_LEDDRIVE_25MA = 0x02,  /**< 25mA */
+  APDS9960_LEDDRIVE_12MA = 0x03   /**< 12.5mA */
 } apds9960LedDrive_t;
 
 /** LED boost settings */
 typedef enum {
   APDS9960_LEDBOOST_100PCNT = 0x00, /**< 100% */
-  APDS9960_LEDBOOST_150PCNT = 0x10, /**< 150% */
-  APDS9960_LEDBOOST_200PCNT = 0x20, /**< 200% */
-  APDS9960_LEDBOOST_300PCNT = 0x30  /**< 300% */
+  APDS9960_LEDBOOST_150PCNT = 0x01, /**< 150% */
+  APDS9960_LEDBOOST_200PCNT = 0x02, /**< 200% */
+  APDS9960_LEDBOOST_300PCNT = 0x03  /**< 300% */
 } apds9960LedBoost_t;
 
 /** Dimensions */
