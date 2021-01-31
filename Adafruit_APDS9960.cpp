@@ -201,7 +201,7 @@ void Adafruit_APDS9960::setProxGain(apds9960PGain_t pGain) {
  *  @return Proxmity gain
  */
 apds9960PGain_t Adafruit_APDS9960::getProxGain() {
-  return (apds9960PGain_t)(read8(APDS9960_CONTROL) & 0x0C);
+  return (apds9960PGain_t)((read8(APDS9960_CONTROL) & 0x0C)>>2);
 }
 
 /*!
