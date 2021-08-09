@@ -31,8 +31,8 @@
 #ifndef _APDS9960_H_
 #define _APDS9960_H_
 
+#include <Adafruit_I2CDevice.h>
 #include <Arduino.h>
-#include <Wire.h>
 
 #define APDS9960_ADDRESS (0x39) /**< I2C Address */
 
@@ -222,8 +222,7 @@ public:
   void enable(boolean en = true);
 
 private:
-  uint8_t _i2caddr;
-  TwoWire *_wire;
+  Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
 
   uint32_t read32(uint8_t reg);
   uint16_t read16(uint8_t reg);
@@ -242,7 +241,6 @@ private:
 
   uint8_t read(uint8_t reg, uint8_t *buf, uint8_t num);
   void write(uint8_t reg, uint8_t *buf, uint8_t num);
-  void _i2c_init();
 
   struct enable {
 
