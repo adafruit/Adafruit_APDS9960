@@ -84,9 +84,11 @@ void Adafruit_APDS9960::enable(boolean en) {
  */
 boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain,
                                  uint8_t addr, TwoWire *theWire) {
-  _wire = theWire;
-  _i2c_init();
-  _i2caddr = addr;
+
+  i2c_dev = new Adafruit_I2CDevice(addr, theWire);
+  if (!i2c_dev->begin()) {
+    return false;
+  }
 
   /* Make sure we're actually connected */
   uint8_t x = read8(APDS9960_ID);
@@ -673,11 +675,6 @@ uint16_t Adafruit_APDS9960::read16R(uint8_t reg) {
 }
 
 /*!
- *  @brief  Begins I2C communication
- */
-void Adafruit_APDS9960::_i2c_init() { _wire->begin(); }
-
-/*!
  *  @brief  Reads num bytes from specified register into a given buffer
  *  @param  reg
  *          Register
@@ -688,26 +685,28 @@ void Adafruit_APDS9960::_i2c_init() { _wire->begin(); }
  *  @return Position after reading
  */
 uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num) {
+  uint8_t buffer[1];
+  size_t chunkSize = i2c_dev->maxBufferSize();
   uint8_t pos = 0;
-  bool eof = false;
 
-  // on arduino we need to read in 32 byte chunks
-  while (pos < num && !eof) {
-
-    uint8_t read_now = min(32, num - pos);
-    _wire->beginTransmission((uint8_t)_i2caddr);
-    _wire->write((uint8_t)reg + pos);
-    _wire->endTransmission();
-
-    _wire->requestFrom((uint8_t)_i2caddr, read_now);
-
-    for (int i = 0; i < read_now; i++) {
-      if (!_wire->available()) {
-        eof = true;
-        break;
+  if (chunkSize > num) {
+    // can just read
+    buffer[0] = reg;
+    i2c_dev->write(buffer, 1);
+    i2c_dev->read(buf, num);
+    pos = num;
+  } else {
+    // must read in chunks
+    uint8_t read_buffer[chunkSize];
+    while (pos < num) {
+      buffer[0] = reg + pos;
+      i2c_dev->write(buffer, 1);
+      uint8_t read_now = min(uint8_t(chunkSize), (uint8_t)(num - pos));
+      i2c_dev->read(read_buffer, read_now);
+      for (uint8_t i = 0; i < read_now; i++) {
+        buf[pos] = read_buffer[i];
+        pos++;
       }
-      buf[pos] = _wire->read();
-      pos++;
     }
   }
   return pos;
@@ -723,8 +722,6 @@ uint8_t Adafruit_APDS9960::read(uint8_t reg, uint8_t *buf, uint8_t num) {
  *          Number of bytes
  */
 void Adafruit_APDS9960::write(uint8_t reg, uint8_t *buf, uint8_t num) {
-  _wire->beginTransmission((uint8_t)_i2caddr);
-  _wire->write((uint8_t)reg);
-  _wire->write((uint8_t *)buf, num);
-  _wire->endTransmission();
+  uint8_t prefix[1] = {reg};
+  i2c_dev->write(buf, num, true, prefix, 1);
 }
