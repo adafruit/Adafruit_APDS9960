@@ -173,7 +173,7 @@ enum {
 class Adafruit_APDS9960 {
 public:
   Adafruit_APDS9960(){};
-  ~Adafruit_APDS9960(){};
+  ~Adafruit_APDS9960();
 
   boolean begin(uint16_t iTimeMS = 10, apds9960AGain_t = APDS9960_AGAIN_4X,
                 uint8_t addr = APDS9960_ADDRESS, TwoWire *theWire = &Wire);
