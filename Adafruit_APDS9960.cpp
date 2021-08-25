@@ -59,6 +59,11 @@ float powf(const float x, const float y) {
   return (float)(pow((double)x, (double)y));
 }
 
+Adafruit_APDS9960::~Adafruit_APDS9960() {
+  if (i2c_dev)
+    delete i2c_dev;
+}
+
 /*!
  *  @brief  Enables the device
  *          Disables the device (putting it in lower power sleep mode)
@@ -85,6 +90,8 @@ void Adafruit_APDS9960::enable(boolean en) {
 boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain,
                                  uint8_t addr, TwoWire *theWire) {
 
+  if (i2c_dev)
+    delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(addr, theWire);
   if (!i2c_dev->begin()) {
     return false;
