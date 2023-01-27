@@ -278,7 +278,7 @@ void Adafruit_APDS9960::setProximityInterruptThreshold(uint8_t low,
 
   if (persistence > 7)
     persistence = 7;
-  _pers.PPERS = persistance;
+  _pers.PPERS = persistence;
   write8(APDS9960_PERS, _pers.get());
 }
 
