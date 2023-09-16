@@ -99,7 +99,7 @@ boolean Adafruit_APDS9960::begin(uint16_t iTimeMS, apds9960AGain_t aGain,
 
   /* Make sure we're actually connected */
   uint8_t id = read8(APDS9960_ID);
-  if (id != APDS9960_DEVICE_ID_1 && id != APDS9960_DEVICE_ID_2 && 
+  if (id != APDS9960_DEVICE_ID_1 && id != APDS9960_DEVICE_ID_2 &&
       id != APDS9960_DEVICE_ID_3) {
     return false;
   }
