@@ -42,7 +42,6 @@
 #define APDS9960_DEVICE_ID_2 (0xA8) /** Chinese clone */
 #define APDS9960_DEVICE_ID_3 (0x9C) /** Another Clone */
 
-
 /** I2C Registers */
 enum {
   APDS9960_RAM = 0x00,
