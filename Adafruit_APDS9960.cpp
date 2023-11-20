@@ -567,14 +567,19 @@ uint16_t Adafruit_APDS9960::calculateColorTemperature(uint16_t r, uint16_t g,
  *          Blue value
  *  @return LUX value
  */
-uint16_t Adafruit_APDS9960::calculateLux(uint16_t r, uint16_t g, uint16_t b) {
-  float illuminance;
-
+uint16_t Adafruit_APDS9960::calculateLux(uint16_t r, uint16_t g, uint16_t b, uint16_t c) {
+  //float illuminance;
+  double lux;
+  
   /* This only uses RGB ... how can we integrate clear or calculate lux */
   /* based exclusively on clear since this might be more reliable?      */
-  illuminance = (-0.32466F * r) + (1.57837F * g) + (-0.73191F * b);
+  
+  /* here is the way to do that with clear! */
+  lux = (double(c) / (2360.0)) * 468.2344;
+  
+  //illuminance = (-0.32466F * r) + (1.57837F * g) + (-0.73191F * b);
 
-  return (uint16_t)illuminance;
+  return (uint16_t)lux;
 }
 
 /*!
