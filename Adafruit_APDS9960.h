@@ -134,7 +134,7 @@ typedef enum {
 enum {
   APDS9960_DIMENSIONS_ALL = 0x00,        // All dimensions
   APDS9960_DIMENSIONS_UP_DOWN = 0x01,    // Up/Down dimensions
-  APGS9960_DIMENSIONS_LEFT_RIGHT = 0x02, // Left/Right dimensions
+  APDS9960_DIMENSIONS_LEFT_RIGHT = 0x02, // Left/Right dimensions
 };
 
 /** FIFO Interrupts */

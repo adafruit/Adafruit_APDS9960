@@ -381,6 +381,10 @@ void Adafruit_APDS9960::enableGesture(boolean en) {
   _enable.GEN = en;
   write8(APDS9960_ENABLE, _enable.get());
   resetCounts();
+  // update to enable gesture sensing without proximity sensing
+  if (en) { // start the gesture engine here without a prox. gesture
+    write8(APDS9960_GCONF4, 0x01);
+  }
 }
 
 /*!
