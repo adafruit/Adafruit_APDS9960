@@ -190,6 +190,7 @@ public:
   void setProxPulse(apds9960PPulseLen_t pLen, uint8_t pulses);
   void enableProximityInterrupt();
   void disableProximityInterrupt();
+  bool proximityDataReady();
   uint8_t readProximity();
   void setProximityInterruptThreshold(uint8_t low, uint8_t high,
                                       uint8_t persistence = 4);

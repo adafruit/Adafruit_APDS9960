@@ -292,6 +292,15 @@ bool Adafruit_APDS9960::getProximityInterrupt() {
 };
 
 /*!
+ *  @brief  Returns status of proximity data
+ *  @return True if proximity data ready, False otherwise
+ */
+bool Adafruit_APDS9960::proximityDataReady() {
+  _status.set(this->read8(APDS9960_STATUS));
+  return _status.PVALID;
+}
+
+/*!
  *  @brief  Read proximity data
  *  @return Proximity
  */
