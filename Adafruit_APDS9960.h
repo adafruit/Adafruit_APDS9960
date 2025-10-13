@@ -34,7 +34,17 @@
 #include <Adafruit_I2CDevice.h>
 #include <Arduino.h>
 
-#define APDS9960_ADDRESS (0x39) /**< I2C Address */
+/**< I2C Address */
+#define APDS9960_ADDRESS (0x39)
+
+/** Original Chip */
+#define APDS9960_DEVICE_ID_1 (0xAB)
+
+/** Chinese clone */
+#define APDS9960_DEVICE_ID_2 (0xA8)
+
+/** Another Clone */
+#define APDS9960_DEVICE_ID_3 (0x9C)
 
 /** I2C Registers */
 enum {
